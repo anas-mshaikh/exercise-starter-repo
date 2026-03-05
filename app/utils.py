@@ -23,6 +23,8 @@ def parse_timestamp(value: str) -> datetime:
     Raises ValueError if the string is not a valid ISO 8601 timestamp.
     """
     try:
+        if isinstance(value, str) and value.endswith("Z"):
+            value = value[:-1] + "+00:00"
         dt = datetime.fromisoformat(value)
     except (ValueError, TypeError):
         raise ValueError(f"Invalid ISO 8601 timestamp: {value}")

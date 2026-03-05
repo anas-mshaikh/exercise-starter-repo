@@ -7,12 +7,16 @@ Uses SQLite for simplicity. All database access goes through get_db().
 import sqlite3
 import os
 
-DATABASE_PATH = os.environ.get("DATABASE_PATH", "events.db")
+DEFAULT_DATABASE_PATH = "events.db"
+
+
+def _database_path() -> str:
+    return os.environ.get("DATABASE_PATH", DEFAULT_DATABASE_PATH)
 
 
 def get_db() -> sqlite3.Connection:
     """Get a database connection with row_factory set for dict-like access."""
-    conn = sqlite3.connect(DATABASE_PATH)
+    conn = sqlite3.connect(_database_path())
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA journal_mode=WAL")
     conn.execute("PRAGMA foreign_keys=ON")
